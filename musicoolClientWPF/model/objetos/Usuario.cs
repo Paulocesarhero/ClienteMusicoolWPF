@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace musicoolClientWPF.model.objetos
 {
-    internal class Usuario
+    public class Usuario
     {
         [JsonProperty("username")]
 
@@ -15,6 +15,12 @@ namespace musicoolClientWPF.model.objetos
         [JsonProperty("password")]
 
         public string password { get; set; }
+
+        [JsonProperty("telefono")]
+
+        public string telefono { get; set; }
+
+        public string Otp { get; set; }
 
     }
 }

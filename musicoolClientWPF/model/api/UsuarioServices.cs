@@ -36,27 +36,23 @@ namespace musicoolClientWPF.model.api
                 _UrlBase = data.configApi.urlBase;
                 _BasicAuth.Cliente = data.configApi.cliente;
                 _BasicAuth.Contra = data.configApi.contra;
-
             }
         }
-        public async Task<RespuestaUsuario> getTokenAcceso(Usuario usuario)
+        public async Task<RespuestaUsuario> EnviarToken(Usuario usuario)
         {
             RespuestaUsuario respuestaUsuario = new RespuestaUsuario();
             string urlBase = _UrlBase;
-            urlBase += "token";
+            urlBase += "login";
             var httpClient = new HttpClient();
             var keyValues = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("username", usuario.username),
                 new KeyValuePair<string, string>("password", usuario.password)
             };
-            string authInfo = "${_BasicAuth.Cliente}:{_BasicAuth.Contra}";
-            authInfo = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authInfo));
-            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Basic", authInfo);
-            httpClient.DefaultRequestHeaders.Authorization = authHeader;
+            
             var request = new HttpRequestMessage(HttpMethod.Post, urlBase);
             request.Content = new FormUrlEncodedContent(keyValues);
-            
+            autentificacionBasica(ref httpClient);
             try
             {
                 var response = await httpClient.SendAsync(request);
@@ -64,21 +60,65 @@ namespace musicoolClientWPF.model.api
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
                     respuestaUsuario = JsonConvert.DeserializeObject<RespuestaUsuario>(responseBody);
-                    respuestaUsuario.Error = false;
-                    respuestaUsuario.Mensaje = "OK";
                     respuestaUsuario._Usuario = usuario;
                 }
             }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
             {
-                respuestaUsuario.Error = true;
-                respuestaUsuario.Mensaje = "Contraseña o nombre de usuario incorrecto";
+                throw new Exception("Contraseña o nombre uncorrectos", ex);
             }
             catch (HttpRequestException e) 
             {
                 throw new Exception("Error en la conexión con el servidor", e);
             }
             return respuestaUsuario;
+         }
+
+        public async Task<bool> ValidarOtp(Usuario usuario)
+        {
+            RespuestaUsuario respuestaUsuario = new RespuestaUsuario();
+            bool bandera = false;
+            string urlBase = _UrlBase;
+            urlBase += "login/auth";
+            var httpClient = new HttpClient();
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("username", usuario.username),
+                new KeyValuePair<string, string>("password", usuario.Otp)
+            };
+
+            var request = new HttpRequestMessage(HttpMethod.Post, urlBase);
+            request.Content = new FormUrlEncodedContent(keyValues);
+            try
+            {
+                var response = await httpClient.SendAsync(request);
+                if (response.EnsureSuccessStatusCode() != null)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    respuestaUsuario = JsonConvert.DeserializeObject<RespuestaUsuario>(responseBody);
+                    respuestaUsuario._Usuario = usuario;
+                    bandera = true;
+                }
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new Exception("Contraseña o nombre uncorrectos", ex);
+            }
+            catch (HttpRequestException e)
+            {
+                throw new Exception("Error en la conexión con el servidor", e);
+            }
+
+            return bandera;
+        }
+
+        private void autentificacionBasica(ref HttpClient httpC)
+        {
+            string authInfo = "${_BasicAuth.Cliente}:{_BasicAuth.Contra}";
+            authInfo = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authInfo));
+            AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Basic", authInfo);
+            httpC.DefaultRequestHeaders.Authorization = authHeader;
+
         }
     }
 }

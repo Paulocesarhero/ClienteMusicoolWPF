@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using musicoolClientWPF.model.api;
 using musicoolClientWPF.model.objetos;
+using musicoolClientWPF.Utilidades;
 
 namespace musicoolClientWPF.Vistas
 {
@@ -34,15 +35,18 @@ namespace musicoolClientWPF.Vistas
                 password = PbPassword.Password,
                 username = TbUsername.Text
             };
-            UsuarioServices usueUsuarioServices = new UsuarioServices();
+            UsuarioServices usuarioServices = new UsuarioServices();
             try
             {
-                usueUsuarioServices.getTokenAcceso(usuario);
+                usuarioServices.EnviarToken(usuario);
+                InfoUsuario.Instance.Usuario = usuario;
+                ValidarOTP validarOtp = new ValidarOTP();
+                NavigationService.Navigate(validarOtp);
             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message,
-                    "Error en la conexión con la base de datos",
+                    "Ocurrio un error",
                     MessageBoxButton.OK);
             }
 
