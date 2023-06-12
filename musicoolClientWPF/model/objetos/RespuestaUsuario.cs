@@ -11,7 +11,10 @@ namespace musicoolClientWPF.model.objetos
     {
         [JsonProperty("access_token")]
         public string access_token { get; set; }
-        public Usuario _Usuario { get; set;}
-        public OTP _Otp { get; set;}
+        [JsonProperty("token_type")]
+        public string token_type { get; set; }
+        [JsonProperty("rol")]
+        public string rol { get; set;}
+
     }
 }

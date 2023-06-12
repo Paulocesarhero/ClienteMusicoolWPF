@@ -1,0 +1,75 @@
+﻿<Page
+    x:Class="musicoolClientWPF.Vistas.Registro"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:musicoolClientWPF.Vistas"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Registro"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBox
+            Name="TbUsername"
+            MinWidth="400"
+            Margin="0,20"
+            VerticalAlignment="Top"
+            materialDesign:HintAssist.Hint="Inserte su nombre de usuario"
+            AcceptsReturn="True"
+            IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignFilledTextBoxEnabledComboBox}"
+            Style="{StaticResource MaterialDesignFilledTextBox}"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="TbPassword"
+            MaxWidth="400"
+            Margin="0,20"
+            VerticalAlignment="Top"
+            materialDesign:HintAssist.Hint="Inserte su contraseña"
+            AcceptsReturn="True"
+            IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignFilledTextBoxEnabledComboBox}"
+            Style="{StaticResource MaterialDesignFilledTextBox}"
+            TextWrapping="Wrap" />
+        <TextBox
+            Name="Tbtelefono"
+            MaxWidth="400"
+            Margin="0,20"
+            VerticalAlignment="Top"
+            materialDesign:HintAssist.Hint="Numero de telefono"
+            AcceptsReturn="True"
+            IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignFilledTextBoxEnabledComboBox}"
+            Style="{StaticResource MaterialDesignFilledTextBox}"
+            TextWrapping="Wrap" />
+        <CheckBox
+            Name="CbArtista"
+            Margin="0,0,0,8"
+            Content="Es un artista"
+            IsChecked="True" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button
+                Margin="10"
+                Name="BtnRegistrar"
+                Click="BtnRegistrar_Click"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignIconForegroundButton}"
+                ToolTip="MaterialDesignIconForegroundButton">
+                <materialDesign:PackIcon Kind="Register" />
+            </Button>
+            <Button
+                Margin="10"
+                Name="BtnBack"
+                Click="BtnBack_Click"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignIconForegroundButton}"
+                ToolTip="MaterialDesignIconForegroundButton">
+                <materialDesign:PackIcon Kind="ArrowBack" />
+            </Button>
+
+        </StackPanel>
+       
+
+
+
+    </StackPanel>
+</Page>

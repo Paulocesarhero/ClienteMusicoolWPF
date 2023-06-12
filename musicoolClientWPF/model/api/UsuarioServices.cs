@@ -9,11 +9,15 @@ using Microsoft.Extensions.Configuration;
 using musicoolClientWPF.model.objetos;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
+using musicoolClientWPF.Utilidades;
+using System.Windows;
+using System.Windows.Media.Animation;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace musicoolClientWPF.model.api
 {
@@ -24,23 +28,17 @@ namespace musicoolClientWPF.model.api
 
         public UsuarioServices()
         {
-            getSettings();
+            _BasicAuth = new BasicAuth()
+            {
+                Cliente = Configuraciones.GetCliente(),
+                Contra = Configuraciones.GetBasicAuthPassword()
+            };
+            _UrlBase = Configuraciones.GetUrlBase();
         }
 
-        private void getSettings()
+        public async Task<bool> EnviarToken(Usuario usuario)
         {
-            using (StreamReader r = new StreamReader("appsettings.json"))
-            {
-                string json = r.ReadToEnd();
-                dynamic data = JObject.Parse(json);
-                _UrlBase = data.configApi.urlBase;
-                _BasicAuth.Cliente = data.configApi.cliente;
-                _BasicAuth.Contra = data.configApi.contra;
-            }
-        }
-        public async Task<RespuestaUsuario> EnviarToken(Usuario usuario)
-        {
-            RespuestaUsuario respuestaUsuario = new RespuestaUsuario();
+            bool bandera = false;
             string urlBase = _UrlBase;
             urlBase += "login";
             var httpClient = new HttpClient();
@@ -58,28 +56,33 @@ namespace musicoolClientWPF.model.api
                 var response = await httpClient.SendAsync(request);
                 if (response.EnsureSuccessStatusCode() != null)
                 {
-                    var responseBody = await response.Content.ReadAsStringAsync();
-                    respuestaUsuario = JsonConvert.DeserializeObject<RespuestaUsuario>(responseBody);
-                    respuestaUsuario._Usuario = usuario;
+                   
+                    MessageBox.Show("Hemos enviado un código a su celular",
+                        "Información",
+                        MessageBoxButton.OK);
+                    bandera = true;
                 }
             }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
             {
-                throw new Exception("Contraseña o nombre uncorrectos", ex);
+                throw new Exception("Contraseña o nombre incorrectos", ex);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw ex;
             }
             catch (HttpRequestException e) 
             {
                 throw new Exception("Error en la conexión con el servidor", e);
             }
-            return respuestaUsuario;
+            return bandera;
          }
 
         public async Task<bool> ValidarOtp(Usuario usuario)
         {
             RespuestaUsuario respuestaUsuario = new RespuestaUsuario();
             bool bandera = false;
-            string urlBase = _UrlBase;
-            urlBase += "login/auth";
+            string urlBase = _UrlBase + "login/auth";
             var httpClient = new HttpClient();
             var keyValues = new List<KeyValuePair<string, string>>
             {
@@ -96,13 +99,50 @@ namespace musicoolClientWPF.model.api
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
                     respuestaUsuario = JsonConvert.DeserializeObject<RespuestaUsuario>(responseBody);
-                    respuestaUsuario._Usuario = usuario;
+                    InfoUsuario.Instance.Usuario.acces_token = respuestaUsuario.access_token;
+                    InfoUsuario.Instance.Usuario.token_type = respuestaUsuario.token_type;
+                    InfoUsuario.Instance.Usuario.rol = respuestaUsuario.rol;
                     bandera = true;
                 }
             }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
             {
-                throw new Exception("Contraseña o nombre uncorrectos", ex);
+                throw new Exception("Contraseña o nombre incorrectos", ex);
+            }
+            catch (HttpRequestException e)
+            {
+                throw new Exception("Error en la conexión con el servidor", e);
+            }
+
+            return bandera;
+        }
+
+        public async Task<bool> CrearUsuario(Usuario usuario)
+        {
+            bool bandera = false;
+            string urlBase = _UrlBase + "usuarios";
+            Dictionary<string, string> requestData = new Dictionary<string, string>
+            {
+                { "username", usuario.username },
+                { "password", usuario.password },
+                { "telefono", usuario.telefono },
+                { "rol", usuario.rol }
+            };
+
+            HttpClient httpClient = new HttpClient();
+            
+
+            try
+            {
+                string jsonContent = JsonSerializer.Serialize(requestData);
+                StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                autentificacionBasica(ref httpClient);
+                var response = await httpClient.PostAsync(urlBase, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    bandera = true;
+                }
             }
             catch (HttpRequestException e)
             {
@@ -114,7 +154,10 @@ namespace musicoolClientWPF.model.api
 
         private void autentificacionBasica(ref HttpClient httpC)
         {
-            string authInfo = "${_BasicAuth.Cliente}:{_BasicAuth.Contra}";
+            var cliente = _BasicAuth.Cliente;
+            var contra = _BasicAuth.Contra;
+
+            string authInfo = cliente + ":" + contra;
             authInfo = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authInfo));
             AuthenticationHeaderValue authHeader = new AuthenticationHeaderValue("Basic", authInfo);
             httpC.DefaultRequestHeaders.Authorization = authHeader;

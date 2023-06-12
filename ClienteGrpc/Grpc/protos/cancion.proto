@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package grpc;
+
+option csharp_namespace = "ClienteGrpc";
+
+
+message Data {
+  bytes data = 5;
+}
+
+message Cancion{
+  string nombreArtista = 7;
+  string album = 8;
+  string nombreCancion = 9;
+}
+
+service Streamer {
+  rpc Audio(Cancion) returns (Data);
+}
