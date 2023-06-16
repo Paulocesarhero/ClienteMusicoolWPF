@@ -13,40 +13,42 @@
     mc:Ignorable="d">
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <!--  Encabezado  -->
-            <TextBlock
+        <ScrollViewer Height="Auto">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <!--  Encabezado  -->
+                <TextBlock
                 Margin="10"
                 HorizontalAlignment="Center"
                 FontSize="20"
                 Text="Musicool" />
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                <TextBox
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBox
                     Name="TbCancionBuscar"
                     MinWidth="150"
                     Margin="10,0"
                     materialDesign:HintAssist.Hint="Nombre de cancion" />
-                <TextBox
+                    <TextBox
                     Name="TbArtistaBucar"
                     MinWidth="150"
                     materialDesign:HintAssist.Hint="Artista" />
-                <Button Name="BtnNombreCancionBuscar" Click="BtnNombreCancionBuscar_Click">
-                    <materialDesign:PackIcon Kind="FindInPage" />
-                </Button>
-            </StackPanel>
-            <TextBlock Name="TbInfoCancion" />
+                    <Button Name="BtnNombreCancionBuscar" Click="BtnNombreCancionBuscar_Click">
+                        <materialDesign:PackIcon Kind="FindInPage" />
+                    </Button>
+                </StackPanel>
+                <TextBlock Name="TbInfoCancion" />
 
-            <!--  Reproductor de audio  -->
-            <MediaElement
+                <!--  Reproductor de audio  -->
+                <MediaElement
                 x:Name="mediaPlayer"
                 Margin="20"
                 HorizontalAlignment="Center"
                 LoadedBehavior="Manual"
                 UnloadedBehavior="Stop" />
 
-            <Image Name="ImgCancion" />
+                <Image Name="ImgCancion" />
 
-            <Slider
+                <Slider
                 x:Name="timeSlider"
                 Width="200"
                 Margin="10"
@@ -54,33 +56,33 @@
                 Maximum="100"
                 Minimum="0"
                 ValueChanged="TimeSlider_ValueChanged" />
-            <TextBlock
+                <TextBlock
                 x:Name="currentTimeText"
                 Margin="10"
                 HorizontalAlignment="Center" />
 
-            <!--  Botones de reproducción  -->
-            <StackPanel
+                <!--  Botones de reproducción  -->
+                <StackPanel
                 Grid.Row="2"
                 Margin="10"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
-                <Button
+                    <Button
                     Margin="5"
                     Click="PlayButton_Click"
                     Content="Play" />
-                <Button
+                    <Button
                     Margin="5"
                     Click="PauseButton_Click"
                     Content="Pause" />
-                <Button
+                    <Button
                     Margin="5"
                     Click="StopButton_Click"
                     Content="Stop" />
-            </StackPanel>
+                </StackPanel>
 
-            <!--  Control deslizante de volumen  -->
-            <Slider
+                <!--  Control deslizante de volumen  -->
+                <Slider
                 x:Name="volumeSlider"
                 Width="200"
                 Margin="10"
@@ -93,26 +95,28 @@
                 TickPlacement="BottomRight"
                 ValueChanged="VolumeSlider_ValueChanged"
                 Value="0.5" />
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                <TextBox
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBox
                     Name="TbComentario"
                     MinWidth="150"
                     materialDesign:HintAssist.Hint="Hazte cool comenta la canción" />
-                <Separator Width="10" Height="0"></Separator>
-                <Button Name="BtnComentar" Click="BtnComentar_Click">
-                    <materialDesign:PackIcon Kind="Comment" />
-                </Button>
-            </StackPanel>
-            <TextBox
+                    <Separator Width="10" Height="0" />
+                    <Button Name="BtnComentar" Click="BtnComentar_Click">
+                        <materialDesign:PackIcon Kind="Comment" />
+                    </Button>
+                </StackPanel>
+                <TextBox
                 Name="TbForo"
                 IsEnabled="False"
-                Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                VerticalScrollBarVisibility="Auto" />
 
-            <Button
+                <Button
                 Name="BtnSubirCancion"
                 Margin="5"
                 Click="BtnSubirCancion_Click"
                 Content="Subir canción" />
-        </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
