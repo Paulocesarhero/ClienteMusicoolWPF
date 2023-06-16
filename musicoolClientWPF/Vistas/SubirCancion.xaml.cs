@@ -69,7 +69,7 @@ namespace musicoolClientWPF.Vistas
                         if (result)
                         {
                             MessageBox.Show("Registro exitoso",
-                                "Felicidades tu canción ahora es cool",
+                                $"Felicidades tu canción {TbArtista.Text} ahora es cool",
                                 MessageBoxButton.OK);
                             Reproductor regresarPagina = new Reproductor();
                             NavigationService.Navigate(regresarPagina);
@@ -78,8 +78,8 @@ namespace musicoolClientWPF.Vistas
                 }
                 catch (Exception exception)
                 {
-                    MessageBox.Show(exception.Message,
-                        "Error en la conexión con la base de datos",
+                    MessageBox.Show("Error de conexion",
+                        "Conexion no disponible",
                         MessageBoxButton.OK);
                 }
             }

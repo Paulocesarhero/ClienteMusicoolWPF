@@ -95,6 +95,7 @@ namespace musicoolClientWPF.Vistas
             _cancionRespuesta = await cancionServices.BuscarCancion(TbArtistaBucar.Text, TbCancionBuscar.Text);
             TbInfoCancion.Text = String.Format("Canción: {0} Artista: {1} Fecha de publicación: {2}", _cancionRespuesta.nombre, _cancionRespuesta.artista, _cancionRespuesta.fechaDePublicacion);
             byte[] imagenBytes = await cancionServices.ObtenerImagen(_cancionRespuesta.id);
+            
             if (imagenBytes != null)
             {
                 BitmapImage bitmapImage = new BitmapImage();
@@ -114,6 +115,7 @@ namespace musicoolClientWPF.Vistas
 
             List<CancionServices.Comentario> comentarios = await cancionServices.ObtenerComentarios(_cancionRespuesta.id);
             StringBuilder sb = new StringBuilder();
+
             if (comentarios != null)
             {
                 foreach (var comentario in comentarios)
@@ -124,6 +126,10 @@ namespace musicoolClientWPF.Vistas
                 }
 
                 TbForo.Text = sb.ToString();
+            }
+            else
+            {
+                TbForo.Text = "";
             }
         }
 
@@ -148,6 +154,7 @@ namespace musicoolClientWPF.Vistas
                         }
 
                         TbForo.Text = sb.ToString();
+                        TbComentario.Text = "";
                     }
                 }
                 catch (Exception exception)
@@ -160,7 +167,7 @@ namespace musicoolClientWPF.Vistas
             else
             {
                 MessageBox.Show("Para ser cool tienes que llenar los comentarios",
-                    "Campos vacions",
+                    "Campos vacios",
                     MessageBoxButton.OK);
                 TbComentario.BorderBrush = Brushes.Red;
             }
