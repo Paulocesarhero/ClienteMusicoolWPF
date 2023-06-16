@@ -14,6 +14,9 @@
 
     <Grid>
         <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="Revisa tu celular" HorizontalAlignment="Center"
+                       Style="{StaticResource MaterialDesignHeadline3TextBlock}"></TextBlock>
+
             <TextBox
                 Name="TbCodigo"
                 MaxWidth="400"
@@ -24,15 +27,25 @@
                 IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignFilledTextBoxEnabledComboBox}"
                 Style="{StaticResource MaterialDesignFilledTextBox}"
                 TextWrapping="Wrap" />
-            <Button
-                Name="BtnNext"
-                Click="BtnNext_Click"
-                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Style="{StaticResource MaterialDesignIconForegroundButton}"
-                ToolTip="MaterialDesignIconForegroundButton">
-                <materialDesign:PackIcon Kind="LocationEnter" />
-            </Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button
+                    Name="BtnNext"
+                    Click="BtnNext_Click"
+                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="MaterialDesignIconForegroundButton">
+                    <materialDesign:PackIcon Kind="LocationEnter" />
+                </Button>
+                <Button
+                    Margin="10"
+                    Name="BtnRegresar"
+                    Click="BtnRegresar_Click"
+                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    ToolTip="MaterialDesignIconForegroundButton">
+                    <materialDesign:PackIcon Kind="ArrowBack" />
+                </Button>
+            </StackPanel>
         </StackPanel>
-
     </Grid>
 </Page>

@@ -24,6 +24,7 @@ namespace musicoolClientWPF.Vistas
     {
         public string ImageFilePath { get; set; }
         public string SongFilePath { get; set; }
+
         public SubirCancion()
         {
             InitializeComponent();
@@ -38,7 +39,6 @@ namespace musicoolClientWPF.Vistas
             if (openFileDialog.ShowDialog() == true)
             {
                 ImageFilePath = openFileDialog.FileName;
-
             }
         }
 
@@ -51,7 +51,6 @@ namespace musicoolClientWPF.Vistas
             if (openFileDialog.ShowDialog() == true)
             {
                 SongFilePath = openFileDialog.FileName;
-
             }
         }
 
@@ -76,7 +75,6 @@ namespace musicoolClientWPF.Vistas
                             NavigationService.Navigate(regresarPagina);
                         }
                     }
-                   
                 }
                 catch (Exception exception)
                 {
@@ -84,7 +82,6 @@ namespace musicoolClientWPF.Vistas
                         "Error en la conexión con la base de datos",
                         MessageBoxButton.OK);
                 }
-
             }
             else
             {
@@ -107,6 +104,12 @@ namespace musicoolClientWPF.Vistas
             }
 
             return TbArtista.Text == "" || TbCancion.Text == "";
+        }
+
+        private void BtnRegresar_Click(object sender, RoutedEventArgs e)
+        {
+            Reproductor reproductor = new Reproductor();
+            NavigationService.Navigate(reproductor);
         }
     }
 }

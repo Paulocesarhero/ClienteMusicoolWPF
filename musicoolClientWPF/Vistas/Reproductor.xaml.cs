@@ -114,15 +114,17 @@ namespace musicoolClientWPF.Vistas
 
             List<CancionServices.Comentario> comentarios = await cancionServices.ObtenerComentarios(_cancionRespuesta.id);
             StringBuilder sb = new StringBuilder();
-
-            foreach (var comentario in comentarios)
+            if (comentarios != null)
             {
-                sb.AppendLine($"Autor: {comentario.autor}");
-                sb.AppendLine($"Comentario: {comentario.comentario}");
-                sb.AppendLine();
-            }
+                foreach (var comentario in comentarios)
+                {
+                    sb.AppendLine($"Autor: {comentario.autor}");
+                    sb.AppendLine($"Comentario: {comentario.comentario}");
+                    sb.AppendLine();
+                }
 
-            TbForo.Text = sb.ToString();
+                TbForo.Text = sb.ToString();
+            }
         }
 
         private async void BtnComentar_Click(object sender, RoutedEventArgs e)

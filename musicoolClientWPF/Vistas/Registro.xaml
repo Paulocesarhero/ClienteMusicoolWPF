@@ -9,8 +9,11 @@
     Title="Registro"
     Width="800"
     Height="450"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:Background="White">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Text="Registro" HorizontalAlignment="Center"
+                   Style="{StaticResource MaterialDesignHeadline3TextBlock}"></TextBlock>
         <TextBox
             Name="TbUsername"
             MinWidth="400"
@@ -65,11 +68,6 @@
                 ToolTip="MaterialDesignIconForegroundButton">
                 <materialDesign:PackIcon Kind="ArrowBack" />
             </Button>
-
         </StackPanel>
-       
-
-
-
     </StackPanel>
 </Page>

@@ -2,7 +2,7 @@
     x:Class="musicoolClientWPF.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Tutorias"
+    Title="Musicool"
     Width="800"
     Height="600"
     ShowsNavigationUI="False"

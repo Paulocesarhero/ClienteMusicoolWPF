@@ -34,8 +34,7 @@ namespace musicoolClientWPF.Vistas
             InfoUsuario.Instance.Usuario.Otp = TbCodigo.Text;
             try
             {
-                 esRespuestaPositiva = await usuarioServices.ValidarOtp(InfoUsuario.Instance.Usuario);
-
+                esRespuestaPositiva = await usuarioServices.ValidarOtp(InfoUsuario.Instance.Usuario);
             }
             catch (Exception exception)
             {
@@ -49,6 +48,12 @@ namespace musicoolClientWPF.Vistas
                 Reproductor reproductor = new Reproductor();
                 NavigationService.Navigate(reproductor);
             }
+        }
+
+        private void BtnRegresar_Click(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            NavigationService.Navigate(login);
         }
     }
 }
