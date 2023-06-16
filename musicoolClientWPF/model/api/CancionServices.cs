@@ -158,7 +158,7 @@ namespace musicoolClientWPF.model.api
                 HttpResponseMessage response = await client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
-                    string archivoTemporal = Path.ChangeExtension(Path.GetTempFileName(), ".mp4");
+                    string archivoTemporal = Path.ChangeExtension(Path.GetTempFileName(), ".mp3");
                     using (FileStream fileStream = new FileStream(archivoTemporal, FileMode.Create, FileAccess.Write))
                     {
                         await response.Content.CopyToAsync(fileStream);
