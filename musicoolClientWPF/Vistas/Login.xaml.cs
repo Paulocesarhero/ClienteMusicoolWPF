@@ -39,20 +39,30 @@ namespace musicoolClientWPF.Vistas
                 password = PbPassword.Password,
                 username = TbUsername.Text
             };
-            try
-            {
-                if (await TratarDeEnviarToken(usuario))
+
+            if(PbPassword.Password != String.Empty && TbUsername.Text != String.Empty) {
+                try
                 {
-                    InfoUsuario.Instance.Usuario = usuario;
-                    ValidarOTP validarOtp = new ValidarOTP();
-                    NavigationService.Navigate(validarOtp);
+                    if (await TratarDeEnviarToken(usuario))
+                    {
+                        InfoUsuario.Instance.Usuario = usuario;
+                        ValidarOTP validarOtp = new ValidarOTP();
+                        NavigationService.Navigate(validarOtp);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Revisa tus datos, por favor.", 
+                        "Datos incorrectos",
+                        MessageBoxButton.OK);
                 }
             }
-            catch (Exception exception)
+            else
             {
-                MessageBox.Show(exception.Message,
-                    "Ocurrio un error al verificar usuario",
-                    MessageBoxButton.OK);
+                MessageBox.Show(
+                        "Necesito tu usuario y contraseña para poder continuar.", "Datos vacios",
+                        MessageBoxButton.OK);
+
             }
         }
 

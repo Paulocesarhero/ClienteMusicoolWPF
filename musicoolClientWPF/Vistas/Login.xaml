@@ -18,8 +18,8 @@
             Height="300"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
-            <TextBlock Text="Login" HorizontalAlignment="Center"
-                       Style="{StaticResource MaterialDesignHeadline3TextBlock}"></TextBlock>
+            <TextBlock Text="Login" HorizontalAlignment="Center"        
+                       Style="{StaticResource MaterialDesignHeadline3TextBlock}" FontWeight="Bold"></TextBlock>
             <TextBox
                 Name="TbUsername"
                 MaxWidth="400"

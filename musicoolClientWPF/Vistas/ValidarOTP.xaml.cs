@@ -28,26 +28,36 @@ namespace musicoolClientWPF.Vistas
         }
 
         private async void BtnNext_Click(object sender, RoutedEventArgs e)
-        {
-            UsuarioServices usuarioServices = new UsuarioServices();
-            bool esRespuestaPositiva = false;
-            InfoUsuario.Instance.Usuario.Otp = TbCodigo.Text;
-            try
+        {   
+            if(TbCodigo.Text != String.Empty)
             {
-                esRespuestaPositiva = await usuarioServices.ValidarOtp(InfoUsuario.Instance.Usuario);
+                UsuarioServices usuarioServices = new UsuarioServices();
+                bool esRespuestaPositiva = false;
+                InfoUsuario.Instance.Usuario.Otp = TbCodigo.Text;
+                try
+                {
+                    esRespuestaPositiva = await usuarioServices.ValidarOtp(InfoUsuario.Instance.Usuario);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Revisa tus codigo, por favor.",
+                        "Codigo incorrecto",
+                        MessageBoxButton.OK);
+                }
+
+                if (esRespuestaPositiva)
+                {
+                    Reproductor reproductor = new Reproductor();
+                    NavigationService.Navigate(reproductor);
+                }
             }
-            catch (Exception exception)
+            else
             {
-                MessageBox.Show(exception.Message,
-                    "Algún error sucedio en la conexión a la base de datos",
-                    MessageBoxButton.OK);
+                MessageBox.Show(
+                        "Necesito tu codigo OTP para poder continuar.", "OTP Vacio",
+                        MessageBoxButton.OK);
             }
 
-            if (esRespuestaPositiva)
-            {
-                Reproductor reproductor = new Reproductor();
-                NavigationService.Navigate(reproductor);
-            }
         }
 
         private void BtnRegresar_Click(object sender, RoutedEventArgs e)
