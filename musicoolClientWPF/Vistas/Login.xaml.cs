@@ -90,7 +90,7 @@ namespace musicoolClientWPF.Vistas
                 }
                 catch (Exception exception)
                 {
-                    throw new Exception("Eror credenciales incorrectas", exception);
+                    throw new Exception("Error credenciales incorrectas", exception);
                 }
             } while (result == false);
             return result;

@@ -1,7 +1,8 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,46 +30,64 @@ namespace musicoolClientWPF.Vistas
 
         private async void BtnRegistrar_Click(object sender, RoutedEventArgs e)
         {
+            
+
             if (!CamposVacios())
             {
-                UsuarioServices usuarioServices = new UsuarioServices();
-                bool result = false;
-                Usuario usuario = new Usuario()
+                if (esNumero(Tbtelefono.Text))
                 {
-                    password = TbPassword.Text,
-                    username = TbUsername.Text,
-                    telefono = Tbtelefono.Text
-                };
-                if (CbArtista.IsChecked == true)
-                {
-                    usuario.rol = "artista";
-                }
-
-                if (CbArtista.IsChecked == false)
-                {
-                    usuario.rol = "escucha";
-                }
-                try
-                {
-                    result = await usuarioServices.CrearUsuario(usuario);
-                    if (result)
+                    UsuarioServices usuarioServices = new UsuarioServices();
+                    bool result = false;
+                    Usuario usuario = new Usuario()
                     {
-                        MessageBox.Show("Registro exitoso",
-                            "Se ha guardado un nuevo usuario en la base de datos",
-                            MessageBoxButton.OK);
-                        Login login = new Login();
-                        NavigationService.Navigate(login);
+                        password = TbPassword.Text,
+                        username = TbUsername.Text,
+                        telefono = Tbtelefono.Text
+                    };
+
+                    usuario.telefono = $"+52{usuario.telefono}";
+
+
+                    if (CbArtista.IsChecked == true)
+                    {
+                        usuario.rol = "artista";
+                    }
+                    else
+                    {
+                        usuario.rol = "escucha";
                     }
 
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message,
-                        "Error en la conexión con la base de datos",
-                        MessageBoxButton.OK);
-                }
+                    try
+                    {
+                        result = await usuarioServices.CrearUsuario(usuario);
+                        if (result)
+                        {
+                            MessageBox.Show($"Bienvenido a Musicool! : {usuario.username}", "Registro Exitoso",
+                                MessageBoxButton.OK);
+                            Login login = new Login();
+                            NavigationService.Navigate(login);
+                        }
 
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show("No se ha podido establecer conexicion, intentelo mas tarde.", "Error de conexion",
+                            MessageBoxButton.OK);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("El numero de telefono es invalido, favor de corregirlo.", "Numero erroneo",
+                            MessageBoxButton.OK);
+                }
             }
+        }
+
+        private bool esNumero(string texto)
+        {
+            Regex regex = new Regex(@"^[0-9]+$");
+
+            return regex.IsMatch(texto);
         }
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)

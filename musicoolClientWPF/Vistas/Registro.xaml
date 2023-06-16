@@ -13,7 +13,7 @@
     d:Background="White">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Text="Registro" HorizontalAlignment="Center"
-                   Style="{StaticResource MaterialDesignHeadline3TextBlock}"></TextBlock>
+                   Style="{StaticResource MaterialDesignHeadline3TextBlock}" FontWeight="Bold"></TextBlock>
         <TextBox
             Name="TbUsername"
             MinWidth="400"
