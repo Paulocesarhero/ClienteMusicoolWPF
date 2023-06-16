@@ -31,8 +31,7 @@
                     MinWidth="150"
                     materialDesign:HintAssist.Hint="Artista" />
                 <Button Name="BtnNombreCancionBuscar" Click="BtnNombreCancionBuscar_Click">
-                    <materialDesign:PackIcon
-                        Kind="FindInPage" />
+                    <materialDesign:PackIcon Kind="FindInPage" />
                 </Button>
             </StackPanel>
             <TextBlock Name="TbInfoCancion" />
@@ -94,15 +93,26 @@
                 TickPlacement="BottomRight"
                 ValueChanged="VolumeSlider_ValueChanged"
                 Value="0.5" />
-
-
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBox
+                    Name="TbComentario"
+                    MinWidth="150"
+                    materialDesign:HintAssist.Hint="Hazte cool comenta la canción" />
+                <Separator Width="10" Height="0"></Separator>
+                <Button Name="BtnComentar" Click="BtnComentar_Click">
+                    <materialDesign:PackIcon Kind="Comment" />
+                </Button>
+            </StackPanel>
+            <TextBox
+                Name="TbForo"
+                IsEnabled="False"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}" />
 
             <Button
                 Name="BtnSubirCancion"
                 Margin="5"
                 Click="BtnSubirCancion_Click"
                 Content="Subir canción" />
-
         </StackPanel>
     </Grid>
 </Page>

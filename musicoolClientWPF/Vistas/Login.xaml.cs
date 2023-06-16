@@ -39,17 +39,25 @@ namespace musicoolClientWPF.Vistas
                 password = PbPassword.Password,
                 username = TbUsername.Text
             };
-            if (await TratarDeEnviarToken(usuario))
+            try
             {
-                InfoUsuario.Instance.Usuario = usuario;
-                ValidarOTP validarOtp = new ValidarOTP();
-                NavigationService.Navigate(validarOtp);
+                if (await TratarDeEnviarToken(usuario))
+                {
+                    InfoUsuario.Instance.Usuario = usuario;
+                    ValidarOTP validarOtp = new ValidarOTP();
+                    NavigationService.Navigate(validarOtp);
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message,
+                    "Ocurrio un error al verificar usuario",
+                    MessageBoxButton.OK);
             }
         }
 
         private async Task<bool> TratarDeEnviarToken(Usuario usuario)
         {
-
             bool result = false;
             do
             {
@@ -71,12 +79,9 @@ namespace musicoolClientWPF.Vistas
                     }
                 }
                 catch (Exception exception)
-                { 
-                    MessageBox.Show(exception.Message,
-                        "Ocurrio un error al verificar usuario",
-                        MessageBoxButton.OK);
+                {
+                    throw new Exception("Eror credenciales incorrectas", exception);
                 }
-
             } while (result == false);
             return result;
         }
@@ -86,5 +91,5 @@ namespace musicoolClientWPF.Vistas
             Registro registro = new Registro();
             NavigationService.Navigate(registro);
         }
-    } 
+    }
 }

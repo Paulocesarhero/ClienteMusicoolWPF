@@ -12,6 +12,8 @@ using System.Text.Json;
 using musicoolClientWPF.model.objetos;
 using Newtonsoft.Json.Linq;
 using System.Security.Policy;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace musicoolClientWPF.model.api
 {
@@ -26,8 +28,7 @@ namespace musicoolClientWPF.model.api
 
         public bool SubirCancion(string imgenPath, string songPath, string idCancion)
         {
-            string url = _UrlBase + "subir-cancion?cancion_id="+idCancion;
-
+            string url = _UrlBase + "subir-cancion?cancion_id=" + idCancion;
             using (HttpClient client = new HttpClient())
             {
                 MultipartFormDataContent form = new MultipartFormDataContent();
@@ -91,12 +92,12 @@ namespace musicoolClientWPF.model.api
                     throw new Exception("eror al registrar cancion " + response.StatusCode);
                 }
             }
-
         }
+
         public async Task<CancionRespuesta> BuscarCancion(string artista, string nombre)
         {
             string url = _UrlBase + "buscar-cancion";
-            string json = JsonSerializer.Serialize(new {id="", nombre = nombre, artista = artista, fechaDePublicacion = "" });
+            string json = JsonSerializer.Serialize(new { id = "", nombre = nombre, artista = artista, fechaDePublicacion = "" });
 
             using (HttpClient client = new HttpClient())
             {
@@ -123,6 +124,7 @@ namespace musicoolClientWPF.model.api
                 }
             }
         }
+
         public async Task<byte[]> ObtenerImagen(string id)
         {
             string url = _UrlBase + "obtener-imagen?id=" + id;
@@ -143,8 +145,6 @@ namespace musicoolClientWPF.model.api
                 }
             }
         }
-
-
 
         public async Task<string> ObtenerCancion(string id)
         {
@@ -172,5 +172,74 @@ namespace musicoolClientWPF.model.api
             }
         }
 
+        public async Task<bool> ComentarCancion(string idCancion, string comentario)
+        {
+            string url = _UrlBase + "agregar-comentario";
+
+            HttpClient client = new HttpClient();
+
+            // Configura los encabezados
+            client.DefaultRequestHeaders.Add("accept", "application/json");
+            client.DefaultRequestHeaders.Add("token", InfoUsuario.Instance.Usuario.acces_token);
+
+            // Crea el objeto de contenido JSON
+            string jsonContent = $@"
+    {{
+        ""idCancion"": ""{idCancion}"",
+        ""autor"": ""{InfoUsuario.Instance.Usuario.username}"",
+        ""comentario"": ""{comentario}"",
+        ""fechaDeComentario"": ""string""
+    }}";
+
+            var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            // Realiza la solicitud POST
+            HttpResponseMessage response = await client.PostAsync(url, httpContent);
+
+            // Verifica si la petición fue exitosa
+            bool isSuccess = response.IsSuccessStatusCode;
+
+            return isSuccess;
+        }
+
+        public async Task<List<Comentario>> ObtenerComentarios(string idCancion)
+        {
+            string url = _UrlBase + "obtener-comentarios?id_Cancion=" + idCancion;
+
+            HttpClient client = new HttpClient();
+
+            // Configurar los encabezados
+            client.DefaultRequestHeaders.Add("accept", "application/json");
+            client.DefaultRequestHeaders.Add("token", InfoUsuario.Instance.Usuario.acces_token);
+
+            // Realizar la solicitud POST
+            HttpResponseMessage response = await client.PostAsync(url, null);
+
+            // Verificar si la respuesta fue exitosa
+            if (response.IsSuccessStatusCode)
+            {
+                // Leer el contenido de la respuesta
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                // Deserializar la respuesta en una lista de objetos Comentario
+                List<Comentario> comentarios = JsonSerializer.Deserialize<List<Comentario>>(responseBody);
+
+                return comentarios;
+            }
+            else
+            {
+                Console.WriteLine("Error al obtener los comentarios. Código de respuesta: " + response.StatusCode);
+                return null;
+            }
+        }
+
+        public class Comentario
+        {
+            [JsonProperty("autor")]
+            public string autor { get; set; }
+
+            [JsonProperty("comentario")]
+            public string comentario { get; set; }
+        }
     }
 }
